@@ -1,5 +1,11 @@
 ## MiddCourses Presentation
 
+By Dana Silver and Teddy Knox
+
+### Details
+
+Presentation to Middlebury SGA Senate at 3:30pm on Saturday, September 6, 2014.
+
 ### Outline
 
 - Brief introduction
