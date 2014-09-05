@@ -1,4 +1,4 @@
-d3.json('analytics.json', function (stats) {
+d3.json('data/analytics.json', function (stats) {
   stats.aggregated_values = JSON.parse(stats.aggregated_values);
 
   var parseDate = d3.time.format('%Y-%m-%d');
@@ -83,7 +83,7 @@ function lineChart (section, stats, color) {
       .text('All Student Email');
 }
 
-d3.json('quota_stats.json', function (stats) {
+d3.json('data/quota_stats.json', function (stats) {
   var margin = {top: 20, right: 20, bottom: 70, left: $('#quota').width() / 20 + 20},
       height = $('#quota').height() - $('#quota h1').outerHeight(true) - margin.top - margin.bottom,
       width = $('#quota').width() - margin.left - margin.right;
@@ -163,7 +163,7 @@ d3.json('quota_stats.json', function (stats) {
       });
 });
 
-d3.json('courses_code_stats.json', function (stats) {
+d3.json('data/courses_code_stats.json', function (stats) {
   stats.forEach(function (d) {
     d.level = +(d.prof_course__course__code.replace(/^\D+/g, '')[0]);
   });
