@@ -1,19 +1,25 @@
 (function (d3) {
   d3.json('analytics.json', function (stats) {
     stats.aggregated_values = JSON.parse(stats.aggregated_values);
-    users(stats.users_by_day)
+
+    var parseDate = d3.time.format('%Y-%m-%d');
+    stats.users_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
+    stats.users_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
+    stats.users_by_day.splice(0, 8);
+
+    stats.reviews_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
+    stats.reviews_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
+    stats.reviews_by_day.splice(0, 5);
+
+    lineChart('#users', stats.users_by_day, 'orange');
+    lineChart('#reviews', stats.reviews_by_day, 'steelblue');
   });
 })(d3);
 
-function users (stats) {
-  var parseDate = d3.time.format('%Y-%m-%d');
-  stats.forEach(function (d) { d.date = parseDate.parse(d.date); });
-  stats.sort(function (a, b) { return d3.ascending(a.date, b.date); });
-  stats.splice(0, 8);
-
-  var margin = {top: 20, right: 20, bottom: 50, left: $('#users').width() / 20},
-      height = $('#users').height() - $('#users h1').outerHeight(true) - margin.top - margin.bottom,
-      width = $('#users').width() - margin.left - margin.right;
+function lineChart (section, stats, color) {
+  var margin = {top: 20, right: 20, bottom: 50, left: $(section).width() / 20},
+      height = $(section).height() - $(section + ' h1').outerHeight(true) - margin.top - margin.bottom,
+      width = $(section).width() - margin.left - margin.right;
 
   var x = d3.time.scale()
       .domain(d3.extent(stats, function(d) { return d.date; }))
@@ -38,7 +44,7 @@ function users (stats) {
       .orient('left')
       .tickSize(-width);
 
-  var svg = d3.select('svg')
+  var svg = d3.select(section + ' svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
     .append('g')
@@ -52,7 +58,7 @@ function users (stats) {
   svg.append('path')
       .datum(stats)
       .attr('d', line)
-      .style('stroke', 'orange')
+      .style('stroke', color)
       .style('stroke-width', '.2em')
       .style('stroke-linecap', 'round')
       .style('fill', 'none');
