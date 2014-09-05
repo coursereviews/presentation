@@ -14,7 +14,8 @@ h1 {
 }
 
 li {
-  padding: 20px 0;
+  padding: 1em 0;
+  font-size: 125%;
 }
 
 h1.main-title {
@@ -33,6 +34,10 @@ ul.presenters {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+ul.presenters li {
+  padding: 40px 0;
 }
 
 a {

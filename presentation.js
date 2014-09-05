@@ -1,20 +1,18 @@
-(function (d3) {
-  d3.json('analytics.json', function (stats) {
-    stats.aggregated_values = JSON.parse(stats.aggregated_values);
+d3.json('analytics.json', function (stats) {
+  stats.aggregated_values = JSON.parse(stats.aggregated_values);
 
-    var parseDate = d3.time.format('%Y-%m-%d');
-    stats.users_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
-    stats.users_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
-    stats.users_by_day.splice(0, 8);
+  var parseDate = d3.time.format('%Y-%m-%d');
+  stats.users_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
+  stats.users_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
+  stats.users_by_day.splice(0, 8);
 
-    stats.reviews_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
-    stats.reviews_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
-    stats.reviews_by_day.splice(0, 5);
+  stats.reviews_by_day.forEach(function (d) { d.date = parseDate.parse(d.date); });
+  stats.reviews_by_day.sort(function (a, b) { return d3.ascending(a.date, b.date); });
+  stats.reviews_by_day.splice(0, 5);
 
-    lineChart('#users', stats.users_by_day, 'orange');
-    lineChart('#reviews', stats.reviews_by_day, 'steelblue');
-  });
-})(d3);
+  lineChart('#users', stats.users_by_day, 'orange');
+  lineChart('#reviews', stats.reviews_by_day, 'steelblue');
+});
 
 function lineChart (section, stats, color) {
   var margin = {top: 20, right: 20, bottom: 50, left: $(section).width() / 20},
@@ -84,3 +82,87 @@ function lineChart (section, stats, color) {
       .style('font-size', '.7em')
       .text('All Student Email');
 }
+
+d3.json('quota_stats.json', function (stats) {
+  var margin = {top: 20, right: 20, bottom: 50, left: $('#quota').width() / 20},
+      height = $('#quota').height() - $('#quota h1').outerHeight(true) - margin.top - margin.bottom,
+      width = $('#quota').width() - margin.left - margin.right;
+
+  console.log(stats);
+});
+
+d3.json('courses_code_stats.json', function (stats) {
+  stats.forEach(function (d) {
+    d.level = +(d.prof_course__course__code.replace(/^\D+/g, '')[0]);
+  });
+
+  var aggregated = d3.nest()
+      .key(function (d) { return d.level; })
+      .rollup(function (leaves) { return d3.sum(leaves, function (d) { return d.count; }) })
+      .entries(stats)
+      .sort(function (a, b) { return d3.ascending(+a.key, +b.key) })
+      .map(function (d) { return {level: +d.key, count: d.values} });
+
+  var margin = {top: 20, right: 20, bottom: 50, left: $('#level').width() / 20},
+      height = $('#level').height() - $('#level h1').outerHeight(true) - margin.top - margin.bottom,
+      width = $('#level').width() - margin.left - margin.right;
+
+  var x = d3.scale.ordinal()
+      .domain(aggregated.map(function(d) { return d.level; }))
+      .rangeRoundBands([0, width], .1);
+
+  var y = d3.scale.linear()
+      .domain([0, d3.max(aggregated, function (d) { return d.count; })])
+      .range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient('bottom')
+      .tickFormat(function (d) { return d + 'xx'});
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient('left');
+
+  var svg = d3.select('#level svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  svg.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis);
+
+  svg.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
+
+  var bar = svg.selectAll('.bar')
+      .data(aggregated)
+    .enter().append('g')
+      .attr('class', 'bar')
+      .attr('transform', function (d) { return 'translate(' + x(d.level) + ',0)'; });
+
+  bar.append('rect')
+      .attr('y', function (d) { return y(d.count); })
+      .attr('height', function (d) { return height - y(d.count); })
+      .attr('width', x.rangeBand())
+      .style('fill', 'steelblue');
+
+  bar.append('text')
+      .attr('x', x.rangeBand() / 2)
+      .attr('y', function (d) { return y(d.count); })
+      .attr('dy', function (d) {
+        if (d.level < 4) return '1.2em';
+        return '-.6em';
+      })
+      .style('text-anchor', 'middle')
+      .style('font-size', '.7em')
+      .style('fill', '#fff')
+      .text(function (d) {
+        if (d.count === 1) return d.count + ' review';
+        return d.count + ' reviews';
+      });
+});
