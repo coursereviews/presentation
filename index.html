@@ -4,15 +4,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
   </head>
   <body>
+    <section style="padding-top:8em">
+      <h1 style="font-size:275%;text-align:center;">
+        <a href="http://go.middlebury.edu/middcoursespresentation">go/<span class="midd">midd</span><span class="courses">courses</span>presentation</a>
+      </h1>
+    </section>
     <section style="padding-top:5em;">
       <a href="http://www.middcourses.com"><h1 class="main-title">
         <span class="midd">midd</span><span class="courses">courses</span>
       </h1></a>
       <ul class="presenters">
-        <a href="http://www.danasilver.org"><li>Dana Silver, '16</li></a>
-        <a href="http://teddyknox.com/"><li>Teddy Knox, '15</li></a>
+        <li><a href="http://www.danasilver.org">Dana Silver, '16</a></li>
+        <li><a href="http://teddyknox.com/">Teddy Knox, '15</a></li>
+      </ul>
+    </section>
+    <section>
+      <h1>The basics</h1>
+      <ul>
+        <li>Each semester you write <span class="highlight">2 reviews</span> to see the rest</li>
+        <li>Reviews are <span class="highlight">anonymous</span></li>
+        <li><span class="highlight">Professors can sign up</span> and see reviews about themselves</li>
       </ul>
     </section>
     <section id="users">
@@ -22,22 +36,50 @@
     <section>
       <h1>Users stats</h1>
       <ul>
-        <li><span style="color:steelblue;font-weight:400;">20 professors and administrators</span> registered</li>
-        <li><span style="color:steelblue;font-weight:400;">158 incoming freshmen</span> registered</li>
-        <li><span style="color:steelblue;font-weight:400;">72%</span> of other users have <span style="color:steelblue;font-weight:400;">written a review</span></li>
+        <li><span class="highlight">20 professors and administrators</span> registered</li>
+        <li><span class="highlight">158 incoming freshmen</span> registered</li>
+        <li><span class="highlight">66%</span> of other users have <span class="highlight">written a review</span></li>
       </ul>
     </section>
     <section id="reviews">
       <h1>1461 reviews</h1>
       <svg></svg>
     </section>
-    <section id="reviews-per-user">
-      <h1>Reviews per user</h1>
+    <section id="quota">
+      <h1>63% users fulfill, <span style="color:orange">11%</span> exceed 2 reviews</h1>
       <svg></svg>
+    </section>
+    <section>
+      <h1>Unified comment format</h1>
+      <div class="comments">
+        <div class="comment"><table><tbody><tr><td class="comment-voting"><span class="glyphicon glyphicon-arrow-up upvote upvote-highlight"></span><span class="glyphicon glyphicon-arrow-down downvote"></span></td><td class="comment-body"><p><a href="http://www.middcourses.com/course/econ155">
+              ECON155: Intro Microeconomics</a> with
+            <a href="http://www.middcourses.com/professor/nicholas-z-muller">
+              Nicholas Z. Muller</a></p><p>
+            Professor Muller is a very effective lecturer. He is very good at conveying the concepts in the course. The size of the lecture class does not facilitate much discussion, but for an intro course Professor Muller is as good as or better than any other teacher.
+          </p></td><td class="comment-flagging"><span class="glyphicon glyphicon-flag flag"></span></td></tr></tbody></table></div>
+          <div class="comment"><table><tbody><tr><td class="comment-voting"><span class="glyphicon glyphicon-arrow-up upvote"></span><span class="glyphicon glyphicon-arrow-down downvote"></span></td><td class="comment-body"><p><a href="http://www.middcourses.com/course/fmmc285">
+              FMMC285: Producing Environmental Media</a> with
+            <a href="http://www.middcourses.com/professor/daniel-e-houghton">
+              Daniel E. Houghton</a></p><p>
+            Daniel is an awesome professor and really knows his trade (animation).  The class is definitely hard because everything depends on you motivating yourself to get your weekly work done.  But, overall great class and awesome to see our final product come together over the semester.
+          </p></td><td class="comment-flagging"><span class="glyphicon glyphicon-flag flag" data-comment-id="1194"></span></td></tr></tbody></table></div>
+      </div>
+    </section>
+    <section>
+      <h1>Spread the word</h1>
+      <ul>
+        <li>Talk to your friends, commons, class</li>
+        <li>Get </li>
+      </ul>
     </section>
     <section id="level">
       <h1>Lower level courses are more reviewed</h1>
       <svg></svg>
+    </section>
+    <section>
+      <h1><a href="https://github.com/coursereviews/coursereviews">Help build the site</a></h1>
+      <img style="display:block;margin:auto;max-width:100%;" src="middcourses-issues.png">
     </section>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="d3.v3.min.js"></script>

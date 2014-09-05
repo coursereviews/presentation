@@ -22,11 +22,11 @@ h1.main-title {
   font-size: 400%;
 }
 
-h1.main-title .midd {
+h1 .midd {
   color: #3376b1;
 }
 
-h1.main-title .courses {
+h1 .courses {
   color: #999;
 }
 
@@ -40,16 +40,21 @@ ul.presenters li {
   padding: 40px 0;
 }
 
-a {
+a,
+a:visited,
+a:active,
+a:focus {
+  color: #fff;
   text-decoration: none;
 }
 
 a:hover {
+  color: #fff;
   text-decoration: underline;
 }
 
-a:visited {
-  color: #fff;
+span.highlight {
+  color: lightskyblue;
 }
 
 .x.axis path,
@@ -67,3 +72,72 @@ a:visited {
   fill: #fff;
   font-size: .5em;
 }
+
+.comments {
+  font-size: .7em;
+  width: 75%;
+  margin: auto;
+  line-height: 1.42;
+}
+
+.comments p {
+  margin: 0 0 10px;
+}
+
+.comments .comment {
+  margin: 10px 0;
+}
+
+.comments .comment .comment-voting,.comments .comment .comment-flagging {
+  width: 5%;
+  padding: 0 5px;
+  vertical-align: top;
+  color: #b4b4b4;
+  text-align: center;
+}
+
+.comments .comment .comment-voting:hover,.comments .comment .comment-flagging:hover {
+  cursor: pointer;
+}
+
+.comments .comment .comment-voting .upvote {
+  margin-left: -2px;
+}
+
+.comments .comment .comment-voting .downvote {
+  margin-right: -1px;
+}
+
+.comments .comment .comment-voting .upvote-highlight {
+  color: #47a447;
+}
+
+.comments .comment .comment-voting .downvote-highlight {
+  color: #d9534f;
+}
+
+.comments .comment .comment-voting span {
+  font-weight: 900;
+}
+
+.comments .comment .comment-flagging span:hover {
+  color: #9b9b9b;
+}
+
+.comments .comment .comment-body {
+  width: 90%;
+  vertical-align: top;
+}
+
+.comments .comment:not(:last-child) {
+  border-bottom: 1px solid #999;
+}
+
+.comment a {
+  color: lightskyblue;
+}
+
+/*#quota text,
+#level text {
+  font-size: .7em;
+}*/
