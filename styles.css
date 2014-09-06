@@ -137,7 +137,25 @@ span.highlight {
   color: lightskyblue;
 }
 
-/*#quota text,
-#level text {
-  font-size: .7em;
-}*/
+.gridlines path {
+  stroke: none;
+}
+
+.gridlines g {
+  stroke: lightgrey;
+  stroke-width: .05em;
+}
+
+.avg text {
+  fill: #fff;
+  font-size: .5em;
+}
+
+.avg path {
+  stroke: #fff;
+  stroke-width: .05em;
+}
+
+#components .gridlines line {
+  opacity: 0.5;
+}

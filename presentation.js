@@ -83,6 +83,169 @@ function lineChart (section, stats, color) {
       .text('All Student Email');
 }
 
+d3.json('data/hours.json', function (stats) {
+  var margin = {top: 20, right: 20, bottom: 70, left: $('#hours').width() / 20 + 20},
+      height = $('#hours').height() - $('#hours h1').outerHeight(true) - margin.top - margin.bottom,
+      width = $('#hours').width() - margin.left - margin.right;
+
+  var data = d3.entries(d3.range(13)).map(function (h) {
+    if (stats.hasOwnProperty(h.key))
+      return {key: +h.key, value: stats[h.key]};
+
+    return {key: +h.key, value: 0};
+  });
+
+  var x = d3.scale.linear()
+      .domain(d3.extent(data, function (d) { return d.key; }))
+      .range([width / data.length / 2, width - width / data.length / 2]);
+
+  var y = d3.scale.linear()
+      .domain([0, d3.max(data, function (d) { return d.value; })])
+      .range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient('bottom');
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient('left')
+      .ticks(5);
+
+  var svg = d3.select('#hours svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  svg.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+    .append('text')
+      .attr('y', '2.5em')
+      .text('hours per week');
+
+  svg.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+    .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('dy', '-3em')
+      .style('text-anchor', 'end')
+      .text('votes');
+
+  svg.append('g')
+      .attr('class', 'y gridlines')
+      .call(yAxis.tickFormat('').tickSize(-width, 0, 0));
+
+  svg.selectAll('rect')
+      .data(data)
+    .enter().append('rect')
+      .attr('class', 'bar')
+      .attr('x', function (d) { return (x(d.key) - width / data.length / 2) + 9; })
+      .attr('y', function (d) { return y(d.value)})
+      .attr('width', (width / data.length) - 10)
+      .attr('height', function (d) { return height - y(d.value)})
+      .style('fill', 'lightskyblue');
+
+  var avgHours = d3.sum(d3.entries(stats), function(d) {
+    return +d.key * d.value;
+  }) / d3.sum(d3.entries(stats), function (d) { return d.value});
+
+  var avgTextFits = true;
+
+  var avg = svg.append('g')
+      .datum(d3.round(avgHours, 1))
+      .attr('class', 'avg')
+      .attr('transform', function (d) {
+        return 'translate(' + x(d) + ',0)';
+      });
+  avg
+    .append('path')
+      .attr('stroke-dasharray', '5,5')
+      .attr('d', 'M0,-10L0,' + height);
+  avg
+    .append('text')
+      .text(function (d) { return 'Average: ' + d + ' hours'; })
+      .datum(function (d) {
+        avgTextFits = this.getBBox().width < (width - x(d) - 3);
+        return d;
+      })
+      .attr('dx', function () {
+        if (avgTextFits) return 3;
+        return -3;
+      })
+      .style('text-anchor', function () {
+        if (avgTextFits) return 'beginning';
+        return 'end';
+      });
+});
+
+d3.json('data/components.json', function (stats) {
+  var margin = {top: 20, right: 20, bottom: 90, left: $('#components').width() / 50},
+      height = $('#components').height() - $('#components h1').outerHeight(true) - margin.top - margin.bottom,
+      barHeight = height / 11,
+      width = $('#components').width() - margin.left - margin.right
+
+  stats = d3.entries(stats);
+
+  var x = d3.scale.linear()
+      .domain([0, d3.max(stats, function (d) { return d.value; })])
+      .range([0, width]);
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .tickSize(-height, 0, 0)
+      .orient('bottom');
+
+  var svg = d3.select('#components svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  svg.append('g')
+      .attr('class', 'x axis gridlines')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+    .append('text')
+      .attr('dy', 40)
+      .text('votes');
+
+  var bar = svg.selectAll('.bar')
+      .data(stats)
+    .enter().append('g')
+      .attr('class', 'bar')
+      .sort(function (a, b) { return d3.descending(a.value, b.value); })
+      .attr('class', 'bar')
+      .attr('transform', function (d, i) { return 'translate(0,' + i * barHeight + ')'});
+
+  bar.append('rect')
+      .attr('width', function (d) { return x(d.value); })
+      .attr('height', barHeight - 3)
+      .style('fill', 'lightskyblue');
+
+  bar.append('text')
+      .attr('y', barHeight / 2 - 1)
+      .attr('dy', '.35em')
+      .text(function (d) { return '' + d.key; })
+      .datum(function (d, i) {
+        if (i < 10)
+          d.textFits = true;
+        else d.textFits = false;
+        return d;
+      })
+      .style('text-anchor', function (d) {
+        return d.textFits ? 'end' : 'beginning';
+      })
+      .attr('x', function (d) {
+        return d.textFits ? x(d.value) - 10 : x(d.value) + 10;
+      })
+      .style('fill', function (d) { return d.textFits ? '#000' : '#fff'; })
+      .style('font-size', '.7em')
+});
+
 d3.json('data/quota_stats.json', function (stats) {
   var margin = {top: 20, right: 20, bottom: 70, left: $('#quota').width() / 20 + 20},
       height = $('#quota').height() - $('#quota h1').outerHeight(true) - margin.top - margin.bottom,
